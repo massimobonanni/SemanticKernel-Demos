@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿#define AOAI
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Connectors.AzureOpenAI;
 
@@ -6,6 +8,7 @@ var configuration = new ConfigurationBuilder()
     .AddUserSecrets<Program>()
     .Build();
 
+#if AOAI
 string apiKey = configuration["AzureOpenAI:ApiKey"];
 string deploymentName = configuration["AzureOpenAI:DeploymentName"];
 string endpoint = configuration["AzureOpenAI:Endpoint"];
@@ -13,6 +16,16 @@ string endpoint = configuration["AzureOpenAI:Endpoint"];
 var kernel = Kernel.CreateBuilder()
     .AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey)
     .Build();
+#endif
+
+#if OAI
+string apiKey = configuration["OpenAI:ApiKey"];
+string modelId = configuration["OpenAI:ModelId"];
+
+var kernel = Kernel.CreateBuilder()
+    .AddOpenAIChatCompletion(modelId, apiKey)
+    .Build();
+#endif
 
 string prompt = """
 Rewrite the text between triple backticks into a business mail. Use a professional tone, be clear and concise.
