@@ -1,9 +1,4 @@
 ﻿using Microsoft.SemanticKernel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace _05_Filters.Filters
 {
@@ -14,7 +9,10 @@ namespace _05_Filters.Filters
             await next(context);
 
             // Modify prompt before submission
-            context.RenderedPrompt = "Safe and sanitized prompt.";
+            if (context.RenderedPrompt.Length > 100)
+            {
+                context.RenderedPrompt = context.RenderedPrompt.Substring(0, 100);
+            }
         }
     }
 }

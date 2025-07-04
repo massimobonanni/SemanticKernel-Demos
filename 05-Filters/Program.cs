@@ -1,5 +1,4 @@
 ﻿using _05_Filters.Filters;
-using Azure.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +9,6 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 
 var hostBuilder = Host.CreateApplicationBuilder(args);
 hostBuilder.Configuration.AddUserSecrets<Program>();
-
 
 // Load configuration settings from configuration
 string? apiKey = hostBuilder.Configuration["ApiKey"];
@@ -36,21 +34,37 @@ Kernel kernel = builder.Build();
 kernel.AutoFunctionInvocationFilters.Add(new EarlyTerminationFilter());
 kernel.PromptRenderFilters.Add(new SafePromptFilter());
 
-OpenAIPromptExecutionSettings settings = new()
-{
-    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
-};
+#region Text prompt
+//Console.Write("Give me the city: ");
+//string? city = Console.ReadLine();
 
-var history = new ChatHistory();
-var userMessage = "What are all of the critical tasks?";
-history.AddUserMessage(userMessage);
-Console.WriteLine("User: " + userMessage);
+//var template = "I'm visiting {{$city}}. What are some activities I should do today?";
 
-var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+//var activitiesFunction = kernel.CreateFunctionFromPrompt(template);
+//var arguments = new KernelArguments { ["city"] = city };
 
-var result = await chatCompletionService.GetChatMessageContentAsync(
-    history,
-    executionSettings: settings,
-    kernel: kernel);
+////InvokeAsync on the KernelFunction object
+//var result = await activitiesFunction.InvokeAsync(kernel, arguments);
+//Console.WriteLine(result);
+#endregion
 
-Console.WriteLine("Assistant: " + result);
+#region PlugInInvocation
+//OpenAIPromptExecutionSettings settings = new()
+//{
+//    FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+//};
+
+//var history = new ChatHistory();
+//var userMessage = "What are all of the critical tasks?";
+//history.AddUserMessage(userMessage);
+//Console.WriteLine("User: " + userMessage);
+
+//var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
+
+//var result = await chatCompletionService.GetChatMessageContentAsync(
+//    history,
+//    executionSettings: settings,
+//    kernel: kernel);
+
+//Console.WriteLine("Assistant: " + result);
+#endregion PlugInInvocation
