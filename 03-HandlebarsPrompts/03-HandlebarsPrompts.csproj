@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <RootNamespace>_03_HandlebarsPrompts</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>1b10c1ee-d337-4c5e-97e9-14e7561be632</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="template.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="template.yml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="9.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
+    <PackageReference Include="Microsoft.SemanticKernel" Version="1.55.0" />
+    <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" Version="1.55.0" />
+  </ItemGroup>
+
+</Project>
