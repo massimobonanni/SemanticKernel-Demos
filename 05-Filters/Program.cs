@@ -33,19 +33,20 @@ Kernel kernel = builder.Build();
 
 kernel.AutoFunctionInvocationFilters.Add(new EarlyTerminationFilter());
 kernel.PromptRenderFilters.Add(new SafePromptFilter());
+kernel.PromptRenderFilters.Add(new BlockWordsFilter(new[] { "milan" }));
 
 #region Text prompt
-//Console.Write("Give me the city: ");
-//string? city = Console.ReadLine();
+Console.Write("Give me the city: ");
+string? city = Console.ReadLine();
 
-//var template = "I'm visiting {{$city}}. What are some activities I should do today?";
+var template = "I'm visiting {{$city}}. What are some activities I should do today?";
 
-//var activitiesFunction = kernel.CreateFunctionFromPrompt(template);
-//var arguments = new KernelArguments { ["city"] = city };
+var activitiesFunction = kernel.CreateFunctionFromPrompt(template);
+var arguments = new KernelArguments { ["city"] = city };
 
-////InvokeAsync on the KernelFunction object
-//var result = await activitiesFunction.InvokeAsync(kernel, arguments);
-//Console.WriteLine(result);
+//InvokeAsync on the KernelFunction object
+var result = await activitiesFunction.InvokeAsync(kernel, arguments);
+Console.WriteLine(result);
 #endregion
 
 #region PlugInInvocation

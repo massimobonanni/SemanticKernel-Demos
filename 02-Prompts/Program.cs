@@ -26,7 +26,7 @@ Kernel kernel = builder.Build();
 //var activitiesFunction = kernel.CreateFunctionFromPrompt(template);
 //var arguments = new KernelArguments { ["city"] = city };
 
-////InvokeAsync on the KernelFunction object
+//////InvokeAsync on the KernelFunction object
 //var result = await activitiesFunction.InvokeAsync(kernel, arguments);
 //Console.WriteLine(result);
 //Console.WriteLine("---------------------------------------------------");
@@ -38,35 +38,35 @@ Kernel kernel = builder.Build();
 #endregion
 
 #region File prompt
-//// Load prompts
-//var prompts = kernel.CreatePluginFromPromptDirectory("./../../../Prompts");
+// Load prompts
+var prompts = kernel.CreatePluginFromPromptDirectory("./../../../Prompts");
 
-//Console.Write("What is your name : ");
-//string userName = Console.ReadLine()!;
+Console.Write("What is your name : ");
+string userName = Console.ReadLine()!;
 
-//Console.Write("What is your request : ");
-//string userInput = Console.ReadLine()!;
+Console.Write("What is your request : ");
+string userInput = Console.ReadLine()!;
 
-//var chatResult = kernel.InvokeStreamingAsync<StreamingChatMessageContent>(
-//  prompts["Complaint"],
-//  new()
-//  {
-//   { "customerName", userName },
-//   { "request", userInput }
-//  }
-//);
+var chatResult = kernel.InvokeStreamingAsync<StreamingChatMessageContent>(
+  prompts["Complaint"],
+  new()
+  {
+   { "customerName", userName },
+   { "request", userInput }
+  }
+);
 
-//string message = "";
+string message = "";
 
-//await foreach (var chunk in chatResult)
-//{
-//    if (chunk.Role.HasValue)
-//    {
-//        Console.Write(chunk.Role + " > ");
-//    }
-//    message += chunk;
-//    Console.Write(chunk);
-//}
+await foreach (var chunk in chatResult)
+{
+    if (chunk.Role.HasValue)
+    {
+        Console.Write(chunk.Role + " > ");
+    }
+    message += chunk;
+    Console.Write(chunk);
+}
 
-//Console.WriteLine();
+Console.WriteLine();
 #endregion

@@ -17,7 +17,7 @@ string? endpoint = hostBuilder.Configuration["Endpoint"];
 var builder = Kernel.CreateBuilder()
     .AddAzureOpenAIChatCompletion(deploymentName, endpoint, apiKey);
 
-//builder.Plugins.AddFromType<TaskManagementPlugin>("TaskManagement");
+builder.Plugins.AddFromType<TaskManagementPlugin>("TaskManagement");
 builder.Plugins.AddFromType<WeatherPlugin>("WeatherPlugin");    
 
 // Build the kernel
@@ -29,14 +29,32 @@ OpenAIPromptExecutionSettings settings = new()
 };
 
 var history = new ChatHistory();
-var userMessage = "What's the current weather and temperature in Rome?";
-history.AddUserMessage(userMessage);
-Console.WriteLine("User: " + userMessage);
 var chatCompletionService = kernel.GetRequiredService<IChatCompletionService>();
 
-var result = await chatCompletionService.GetChatMessageContentAsync(
-    history,
-    executionSettings: settings,
-    kernel: kernel);
+Console.WriteLine("Chat started! Type 'exit' or 'quit' to end the conversation.");
+Console.WriteLine();
 
-Console.WriteLine("Assistant: " + result);
+while (true)
+{
+    Console.Write("User: ");
+    var userMessage = Console.ReadLine();
+    
+    if (string.IsNullOrWhiteSpace(userMessage) || 
+        userMessage.ToLower() == "exit" || 
+        userMessage.ToLower() == "quit")
+    {
+        Console.WriteLine("Goodbye!");
+        break;
+    }
+
+    history.AddUserMessage(userMessage);
+
+    var result = await chatCompletionService.GetChatMessageContentAsync(
+        history,
+        executionSettings: settings,
+        kernel: kernel);
+
+    history.AddAssistantMessage(result.Content ?? "");
+    Console.WriteLine("Assistant: " + result);
+    Console.WriteLine();
+}

@@ -14,7 +14,7 @@ public class WeatherPlugin
     public decimal? GetCurrentTemperature([Description("the name of the city")] string city)
     {
 
-        return (decimal?)32.0; 
+        return (decimal?)42.0; 
     }
 
     
